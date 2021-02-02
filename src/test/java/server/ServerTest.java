@@ -1,61 +1,60 @@
 package server;
 
 import config.PropertiesConfig;
-import javafx.application.Application;
-import junit.framework.TestCase;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.io.*;
+import java.net.Socket;
 
-public class ServerTest extends TestCase {
-    static {
+public class ServerTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
+    private static String ADDRESS;
+    private static String PORT;
+    public DataInputStream dataInputStream = null;
+    public DataOutputStream dataOutputStream = null;
+    static Socket socket = null;
+    public BufferedReader bufferedReader = null;
+
+    public void startConnection(String address, int port) {
+        try {
+            socket = new Socket(address, port);
+            dataInputStream = new DataInputStream(socket.getInputStream());
+            dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+    }
+
+    public String requestToServer(String request) {
+        String response = "";
+        try {
+            dataOutputStream.writeUTF(request);
+            response = dataInputStream.readUTF();
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
+        return response;
+    }
+
+    public void dispose() throws IOException {
+        bufferedReader.close();
+        dataInputStream.close();
+        dataOutputStream.close();
+        socket.close();
+    }
+
+    public static void main(String args[]) {
+        initPropertyConfig();
+//        startConnection(ADDRESS,Integer.parseInt(PORT));
+    }
+
+    private static void initPropertyConfig() {
+        PropertyConfigurator.configure(PropertyConfigurator.class.getClassLoader().getResourceAsStream("log4j.properties"));
         PropertiesConfig.initialize("application.properties");
-    }
-
-    private static final String ADDRESS = PropertiesConfig.getProperties().getProperty("game.server.address");
-    private static final String PORT = PropertiesConfig.getProperties().getProperty("game.server.port");
-    private ExecutorService executorService;
-    Client client;
-
-
-    @Before
-    public void setup() throws InterruptedException {
-        executorService = Executors.newSingleThreadExecutor();
-        executorService.execute(() ->
-                Server.main(new String[]{}));
-
-        //wait for server under test to start external sockets connections.
-        Thread.sleep(2000);
-
-        //start test testClient1
-        client = new Client();
-        client.startConnection(ADDRESS,Integer.parseInt(PORT));
-
-        //client.requestToServer("machine");
-//        socketPlayer1 = testClient1.start(SERVER_IP, Integer.parseInt(SERVER_PORT));
-
-//        Thread.sleep(100);
-
-        //start test testClient2
-//        testClient2 = new Client();
-//        socketPlayer2 = testClient2.start(SERVER_IP, Integer.parseInt(SERVER_PORT));
-//        Thread.sleep(100);
-    }
-
-    @After
-    public void shutdown() throws IOException {
-        client.requestToServer("stop");
-        executorService.shutdown();
-    }
-
-    @Test
-    public void testStart() throws InterruptedException {
-        client.requestToServer("hi");
-        assertEquals(true,true);
-
+        ADDRESS = PropertiesConfig.getProperties().getProperty("game.address");
+        PORT = PropertiesConfig.getProperties().getProperty("game.port");
     }
 }
