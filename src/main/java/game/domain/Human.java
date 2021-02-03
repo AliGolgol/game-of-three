@@ -18,7 +18,7 @@ public class Human extends Player {
         name = "PLAYER 1" ;
     }
 
-    public OutputNumberMem receive(InputGameRound number, String opponent) {
+    public OutputNumberMem receive(InputGameRound number) {
         int result = number.sum() / Integer.parseInt(DIVIDE_NUMBER);
         return new OutputNumberMem(number.getAdditionNumber(), result, false, name);
     }

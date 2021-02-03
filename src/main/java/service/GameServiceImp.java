@@ -1,13 +1,12 @@
 package service;
 
-import game.domain.Player;
-import gameRound.domain.Game;
-import gameRound.domain.InputGameRound;
 import gameRound.OutputCareTaker;
 import gameRound.OutputNumberMem;
+import gameRound.domain.Game;
+import gameRound.domain.InputGameRound;
 
 public class GameServiceImp implements GameService {
-    static Game game = new Game();
+    Game game = new Game();
     OutputCareTaker careTaker = new OutputCareTaker();
 
     @Override
@@ -28,30 +27,17 @@ public class GameServiceImp implements GameService {
             outputNumberMem = game.play(number);
             careTaker.add(outputNumberMem);
             result = new OutputDto(outputNumberMem.getAddition(), outputNumberMem.getResult(),
-                    "");
+                    "",outputNumberMem.getPlayerName());
         } else {
             result = new OutputDto(number.getAdditionNumber(), number.getNumber(),
-                    String.format("%s, you should wait to another player to start", game.getFirstPlayer().getName()));
+                    String.format("%s, you should wait to another player to start", game.getCurrentPlayer()),
+                    game.getCurrentPlayer());
         }
         if (outputNumberMem != null && outputNumberMem.isWinner()) {
             result = new OutputDto(outputNumberMem.getAddition(), outputNumberMem.getResult(),
-                    String.format("The winner is %s", outputNumberMem.getPlayerName()));
+                    String.format("The winner is %s", outputNumberMem.getPlayerName()),
+                    outputNumberMem.getPlayerName());
         }
         return result;
-    }
-
-    @Override
-    public Player getFirstPlayer() {
-        return game.getFirstPlayer();
-    }
-
-    @Override
-    public Player getSecondPlayer() {
-        return game.getSecondPlayer();
-    }
-
-    @Override
-    public boolean canPlay() {
-        return game.canPlay();
     }
 }

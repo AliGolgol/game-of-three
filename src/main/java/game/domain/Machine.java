@@ -29,7 +29,7 @@ public class Machine extends Player {
         name = "PLAYER 2" ;
     }
 
-    public OutputNumberMem receive(InputGameRound number, String opponent) {
+    public OutputNumberMem receive(InputGameRound number) {
         int remain = number.getNumber() % Integer.parseInt(DIVIDE_NUMBER);
         int addition = ADDITION_NUMBERS.get(remain);
         int result = (number.getNumber() + addition) / Integer.parseInt(DIVIDE_NUMBER);

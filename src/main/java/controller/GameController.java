@@ -20,7 +20,7 @@ public class GameController {
         try {
             result = gameService.play(number);
         }catch (GameRoundException e){
-            result = new OutputDto(number.getAdditionNumber(),number.getNumber(),e.getMessage());
+            result = new OutputDto(number.getAdditionNumber(),number.getNumber(),e.getMessage(),result.getPlayerName());
         }
         return result;
     }

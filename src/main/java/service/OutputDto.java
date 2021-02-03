@@ -4,11 +4,13 @@ public class OutputDto {
     int addition;
     int number;
     String message;
+    String playerName;
 
-    public OutputDto(int addition, int number, String message) {
+    public OutputDto(int addition, int number, String message, String playerName) {
         this.addition = addition;
         this.number = number;
         this.message = message;
+        this.playerName = playerName;
     }
 
     public int getAddition() {
@@ -22,4 +24,5 @@ public class OutputDto {
     public String getMessage() {
         return message;
     }
+    public String getPlayerName(){return playerName;}
 }

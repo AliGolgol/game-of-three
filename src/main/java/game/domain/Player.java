@@ -5,7 +5,6 @@ import gameRound.OutputNumberMem;
 
 public abstract class Player {
     public abstract void register();
-    public abstract OutputNumberMem receive(InputGameRound number, String opponent);
-    public abstract String getId();
+    public abstract OutputNumberMem receive(InputGameRound number);
     public abstract String getName();
 }

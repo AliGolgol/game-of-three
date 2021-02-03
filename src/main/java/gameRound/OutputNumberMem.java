@@ -16,7 +16,9 @@ public class OutputNumberMem {
     public void defineWinnerStatus(boolean isWinner) {
         this.isWinner = isWinner;
     }
-
+public void definePlayer(String playerName){
+        this.playerName = playerName;
+}
     public int getAddition() {
         return addition;
     }

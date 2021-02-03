@@ -56,16 +56,18 @@ public class ClientTest {
         assertEquals("The winner is PLAYER 2", firstAnsFromMachine);
     }
 
-//    @Test
-//    public void twoRealPlayerPlayWithEachOther() throws InterruptedException {
-//        client1.requestToServer("human");
+    @Test
+    public void twoRealPlayerPlayWithEachOther() throws InterruptedException {
+        client1.requestToServer("human");
+        client2.requestToServer("human");
 //        Thread.sleep(2000);
-//        client2.requestToServer("human");
-//
-//        Thread.sleep(2000);
-//        String res1 = client1.requestToServer("-1");
-//
-//        assertEquals("",1,Integer.parseInt(res1));
-//    }
+
+        String res1 = client1.requestToServer("-1");
+        String res2 = client2.requestToServer("-1");
+        Thread.sleep(4000);
+
+        assertEquals("",1,Integer.parseInt(res1));
+        assertEquals("",1,Integer.parseInt(res2));
+    }
 
 }

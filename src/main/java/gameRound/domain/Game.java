@@ -34,8 +34,6 @@ public class Game {
     Player firstPlayer = null;
     Winner winnerLogic;
     String id;
-    State state;
-
 
     static {
         map.put(1, new Human());
@@ -60,13 +58,10 @@ public class Game {
             secondPlayer = map.get(playerType);
             secondPlayer.register();
             players.add(secondPlayer);
-
-            state = State.started;
         } else {
             firstPlayer = map.get(HUMAN);
             firstPlayer.register();
             players.add(firstPlayer);
-            state = State.waited;
         }
     }
 
@@ -84,11 +79,13 @@ public class Game {
                 return new OutputNumberMem(number.getAdditionNumber(), number.sum(), true, players.get(currentPlayer).getName());
             }
             InputGameRound input = new InputGameRound(number.additionNumber, inputResult);
-            outputNumberMem = map.get(playerType) instanceof Human
-                    ? next().receive(input, firstPlayer.getId())
-                    : secondPlayer.receive(input, firstPlayer.getId());
+//            outputNumberMem = map.get(playerType) instanceof Human
+//                    ? next().receive(input)
+//                    : secondPlayer.receive(input);
+            outputNumberMem = next().receive(input);
             isWinner = winnerLogic.apply(outputNumberMem.getResult());
             outputNumberMem.defineWinnerStatus(isWinner);
+            outputNumberMem.definePlayer(players.get(currentPlayer).getName());
             return outputNumberMem;
         } catch (GameRoundException e) {
             LOGGER.info(e.toString());
@@ -111,19 +108,11 @@ public class Game {
         return startNumber;
     }
 
-    public Player getFirstPlayer() {
-        return firstPlayer;
-    }
-
-    public Player getSecondPlayer() {
-        return secondPlayer;
-    }
-
     public boolean canPlay() {
         return players.size() >= MINIMUM_PLAYERS;
     }
-    public int getCurrentPlayer() {
-        return currentPlayer;
+    public String getCurrentPlayer() {
+        return players.get(currentPlayer).getName();
     }
     public int getPlayerType() {
         return playerType;
