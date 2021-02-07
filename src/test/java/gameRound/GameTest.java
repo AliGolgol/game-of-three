@@ -47,7 +47,7 @@ public class GameTest {
         game.create();
         game.create();
 
-        assertEquals("Current player is 0 when it is the first round of game", 0, game.getCurrentPlayer());
+        assertEquals("Current player is 0 when it is the first round of game", "PLAYER 5", game.getCurrentPlayer());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class GameTest {
         game.create();
         game.create();
         game.play(new InputGameRound(-1,10));
-        assertEquals("Current player is 0 when it is the first round of game", 1, game.getCurrentPlayer());
+        assertEquals("Current player is 0 when it is the first round of game", "PLAYER 7", game.getCurrentPlayer());
     }
     @Test
     public void testGetSecondPlayer() {

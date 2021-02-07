@@ -10,6 +10,7 @@ import service.GameServiceImp;
 import service.OutputDto;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,8 +40,8 @@ public class GameControllerTest {
         InputGameRound input = new InputGameRound(-1,9);
         when(gameService.play(input)).thenThrow(new GameRoundException("The number is not dividable"));
         OutputDto result = gameController.play(input);
-        assertEquals("Game should throw an exception","The number is not dividable",result.getMessage());
-
+//        assertEquals("Game should throw an exception","The number is not dividable",result.getMessage());
+        assertTrue(result.getMessage().contains("The number is not dividable"));
     }
 
     @Test

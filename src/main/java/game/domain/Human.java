@@ -15,7 +15,7 @@ public class Human extends Player {
 
     public void register() {
         id = UUID.randomUUID().toString();
-        name = "PLAYER 1" ;
+        name = "PLAYER " + ATOMIC_INTEGER.incrementAndGet();
     }
 
     public OutputNumberMem receive(InputGameRound number) {

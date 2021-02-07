@@ -13,6 +13,7 @@ import gameRound.winLogic.WinnerImp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Reader;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -30,8 +31,6 @@ public class Game {
     boolean isWinner;
     List<Player> players = new ArrayList<>();
     Validator validator = null;
-    Player secondPlayer = null;
-    Player firstPlayer = null;
     Winner winnerLogic;
     String id;
 
@@ -51,17 +50,17 @@ public class Game {
         winnerLogic = new WinnerImp();
         this.id = UUID.randomUUID().toString();
         if (map.get(playerType) instanceof Machine) {
-            firstPlayer = map.get(HUMAN);
-            firstPlayer.register();
-            players.add(firstPlayer);
+            Player machinePlayer = map.get(HUMAN);
+            machinePlayer.register();
+            players.add(machinePlayer);
 
-            secondPlayer = map.get(playerType);
-            secondPlayer.register();
-            players.add(secondPlayer);
+            Player humanPlayer = map.get(playerType);
+            humanPlayer.register();
+            players.add(humanPlayer);
         } else {
-            firstPlayer = map.get(HUMAN);
-            firstPlayer.register();
-            players.add(firstPlayer);
+            Player human = new Human();// map.get(HUMAN);
+            human.register();
+            players.add(human);
         }
     }
 
@@ -70,22 +69,22 @@ public class Game {
     }
 
     public OutputNumberMem play(InputGameRound number) {
+        LOGGER.info(number.toString());
         OutputNumberMem outputNumberMem = null;
         int inputResult;
         try {
             number.validate();
             inputResult = number.sum() / Integer.parseInt(DIVIDE_NUMBER);
             if (winnerLogic.apply(inputResult)) {
-                return new OutputNumberMem(number.getAdditionNumber(), number.sum(), true, players.get(currentPlayer).getName());
+                return new OutputNumberMem(number.getAdditionNumber(), inputResult, true, players.get(currentPlayer).getName());
             }
-            InputGameRound input = new InputGameRound(number.additionNumber, inputResult);
-//            outputNumberMem = map.get(playerType) instanceof Human
-//                    ? next().receive(input)
-//                    : secondPlayer.receive(input);
+            InputGameRound input = new InputGameRound(number.additionNumber, number.getNumber());
             outputNumberMem = next().receive(input);
+
             isWinner = winnerLogic.apply(outputNumberMem.getResult());
             outputNumberMem.defineWinnerStatus(isWinner);
             outputNumberMem.definePlayer(players.get(currentPlayer).getName());
+            next();
             return outputNumberMem;
         } catch (GameRoundException e) {
             LOGGER.info(e.toString());
@@ -100,6 +99,7 @@ public class Game {
     }
 
     private Player next() {
+        LOGGER.info(String.valueOf(players.size()));
         currentPlayer = (currentPlayer + 1) % players.size();
         return players.get(currentPlayer);
     }

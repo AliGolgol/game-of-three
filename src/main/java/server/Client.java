@@ -23,6 +23,19 @@ public class Client {
             dataInputStream = new DataInputStream(socket.getInputStream());
             dataOutputStream = new DataOutputStream(socket.getOutputStream());
             bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+//            bufferedReader = new BufferedReader(in);
+//            LOGGER.info("Do you want to play with Machine or Human?");
+//            LOGGER.info("Type Human or Machine to start");
+//
+//            String stringFromServer = "", stringToServer = "";
+//            while (!stringFromServer.equals("stop")) {
+//                stringToServer = bufferedReader.readLine();
+//                stringToServer = stringToServer == null ? "" : stringToServer;
+//                dataOutputStream.writeUTF(stringToServer);
+//                dataOutputStream.flush();
+//                stringFromServer = dataInputStream.readUTF();
+//                LOGGER.info(stringFromServer);
+//            }
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
